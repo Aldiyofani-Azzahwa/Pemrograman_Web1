@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Status Kelulusan (JavaScript Dasar)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background:#f7f7f7; }
+    .container { max-width: 420px; margin: auto; padding: 20px; background:#fff; border: 1px solid #ddd; border-radius: 8px; box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+    label { display:block; margin-top:10px; font-weight:600; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top:6px; margin-bottom:6px; box-sizing: border-box; border-radius:4px; border:1px solid #ccc; }
+    button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; display:inline-block; margin-top:10px; }
+    button:active { transform: translateY(1px); }
+    #hasil { margin-top: 18px; padding: 12px; border-radius:6px; border: 1px dashed #007bff; min-height: 36px; background: #fdfdfd; }
+    .note { font-size:13px; color:#555; margin-top:6px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Cek Status Kelulusan Matkul</h2>
+
+    
+    <label for="nilaiTeori">Nilai Teori (0–100):</label>
+    <input type="number" id="nilaiTeori" min="0" max="100" step="0.1" placeholder="Contoh: 80.5">
+
+   
+    <label for="nilaiPraktik">Nilai Praktik (0–100):</label>
+    <input type="number" id="nilaiPraktik" min="0" max="100" step="0.1" placeholder="Contoh: 72.25">
+
+    
+    <button id="cekBtn">Cek Status</button>
+    <div class="note">Rata-rata &ge; 75 → <b>LULUS</b>. Jika kurang dari 75 → <b>TIDAK LULUS (remedial)</b>.</div>
+
+    
+    <h3>Hasil:</h3>
+    <p id="hasil" aria-live="polite">Status akan muncul di sini.</p>
+  </div>
+
+  <script>
+    
+    const inputTeori = document.getElementById('nilaiTeori');
+    const inputPraktik = document.getElementById('nilaiPraktik');
+    const hasilElement = document.getElementById('hasil');
+    const cekBtn = document.getElementById('cekBtn');
+
+    
+    function hitungKelulusan() {
+      
+      const teoriVal = parseFloat(inputTeori.value);
+      const praktikVal = parseFloat(inputPraktik.value);
+
+      
+      if (isNaN(teoriVal) || isNaN(praktikVal)) {
+        hasilElement.style.color = 'red';
+        hasilElement.innerHTML = 'Masukkan nilai yang valid di kedua kolom (angka).';
+        return;
+      }
+      if (teoriVal < 0 || praktikVal < 0 || teoriVal > 100 || praktikVal > 100) {
+        hasilElement.style.color = 'red';
+        hasilElement.innerHTML = 'Nilai harus berada antara 0 sampai 100.';
+        return;
+      }
+
+      
+      const rataRata = (teoriVal + praktikVal) / 2;
+
+      
+      let statusText;
+      let warna;
+      if (rataRata >= 75) {
+        statusText = 'LULUS! Selamat, Anda memenuhi standar kelulusan.';
+        warna = 'green';
+      } else {
+        statusText = 'TIDAK LULUS. Rata-rata di bawah 75. Silakan ikuti remedial.';
+        warna = 'red';
+      }
+
+      
+      hasilElement.style.color = warna;
+      hasilElement.innerHTML = `Rata-rata Nilai: <b>${rataRata.toFixed(2)}</b><br>Status: ${statusText}`;
+    }
+
+  
+    cekBtn.addEventListener('click', hitungKelulusan);
+   
+    inputTeori.addEventListener('keydown', (e) => { if (e.key === 'Enter') hitungKelulusan(); });
+    inputPraktik.addEventListener('keydown', (e) => { if (e.key === 'Enter') hitungKelulusan(); });
+  </script>
+
+</body>
+</html>
